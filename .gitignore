@@ -2,6 +2,9 @@
 # *.lock
 .DS_Store
 memo.txt
+*.jpg
+*.jpeg
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

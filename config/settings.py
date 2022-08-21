@@ -38,9 +38,19 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-CUSTOM_APPS = ["users.apps.UsersConfig"]
+THIRD_PARTY_APPS = ["django_countries"]
 
-INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS
+CUSTOM_APPS = [
+    "users.apps.UsersConfig",
+    "core.apps.CoreConfig",
+    "rooms.apps.RoomsConfig",
+    "reviews.apps.ReviewsConfig",
+    "reservations.apps.ReservationsConfig",
+    "lists.apps.ListsConfig",
+    "conversations.apps.ConversationsConfig",
+]
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
