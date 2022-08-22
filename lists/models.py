@@ -1,3 +1,4 @@
+from itertools import count
 from django.db import models
 from core import models as core_models
 
@@ -13,3 +14,8 @@ class List(core_models.AbstractTimeStampedModel):
 
     def __str__(self):
         return self.name
+
+    def count_rooms(self):
+        return self.rooms.count()
+
+    count_rooms.short_description = "#rooms"

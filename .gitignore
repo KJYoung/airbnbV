@@ -4,6 +4,7 @@
 memo.txt
 *.jpg
 *.jpeg
+uploads/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

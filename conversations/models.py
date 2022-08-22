@@ -10,7 +10,22 @@ class Conversation(core_models.AbstractTimeStampedModel):
     )
 
     def __str__(self):
-        return f"conversation created at {self.created}"
+        usernames = []
+        for user in self.participants.all():
+            usernames.append(user.username)
+        username = ", ".join(usernames)
+        return username
+        # return f"conversation created at {self.created}"
+
+    def count_messages(self):
+        return self.messages.count()
+
+    count_messages.short_description = "#messages"
+
+    def count_participants(self):
+        return self.participants.count()
+
+    count_participants.short_description = "#participants"
 
 
 class Message(core_models.AbstractTimeStampedModel):

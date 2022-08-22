@@ -24,3 +24,16 @@ class Review(core_models.AbstractTimeStampedModel):
     def __str__(self):
         return f"{self.user.username}'s review on {self.room.name}"
         # return self.user.username + "'s review about " + self.room.name
+
+    def rating_average(self):
+        avg = (
+            self.accuracy
+            + self.communication
+            + self.cleanliness
+            + self.location
+            + self.check_in
+            + self.value
+        ) / 6.0
+        return round(avg, 2)
+
+    rating_average.short_description = "Avg."
