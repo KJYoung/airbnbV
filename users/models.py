@@ -1,6 +1,3 @@
-from pyexpat import model
-from statistics import mode
-from tkinter import CURRENT
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
