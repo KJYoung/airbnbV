@@ -96,6 +96,7 @@ class RoomAdmin(admin.ModelAdmin):
         ),
     )
     list_display = (
+        "id",
         "name",
         "country",
         "city",
@@ -110,6 +111,7 @@ class RoomAdmin(admin.ModelAdmin):
         "count_amenities",
         "count_photos",
         "total_rating_average",
+        "created",
     )
 
     ordering = ("price", "name")
