@@ -5,7 +5,22 @@
 {% endblock page_name %}
 
 {% block content %}
-{% for room in rooms %}
-    <h3>{{room.name}} / {{room.price}}₩</h3>
-{% endfor %}
+    {% for room in rooms %}
+        <h3>{{room.name}} / {{room.price}}₩</h3>
+    {% endfor %}
+
+    <h5>
+        {% if pageNum != 1 %}
+            <a href="?page={{pageNum|add:-1}}&page_size={{pageSize}}">◀️</a>
+        {% endif %}
+        Page {{pageNum}}/{{pageTotal}}
+        {% if pageNum != pageTotal %}
+            <a href="?page={{pageNum|add:1}}&page_size={{pageSize}}">▶️</a>
+        {% endif %}
+    </h5>
+
+
+    {% for page in pageRange %}
+        <a href="?page={{page}}&page_size={{pageSize}}">{{page}}</a>
+    {% endfor %}
 {% endblock content %}
