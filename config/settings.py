@@ -139,3 +139,9 @@ MEDIA_ROOT = os.path.join(
 )  # The directory where the uploaded media will be saved.
 
 MEDIA_URL = "/media/"
+
+# DEBUG = False
+# ALLOWED_HOSTS = ["*"]
+
+# DEBUG = True
+# ALLOWED_HOSTS = []

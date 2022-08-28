@@ -1,42 +1,70 @@
-from math import ceil
-from django.shortcuts import render
-from datetime import datetime
+from django.utils import timezone
+from django.http import Http404
+from django.urls import reverse
+from django.views.generic import ListView, DetailView
+from django.shortcuts import render, redirect
 from . import models
 
-# from django.http import HttpResponse
+
+class HomeView(ListView):
+    """HomeView definition"""
+
+    model = models.Room
+    paginate_by: int = 10
+    paginate_orphans: int = 5
+    page_kwarg: str = "page"
+    ordering = ["created"]
+    context_object_name = "rooms"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["now"] = timezone.now()
+        return context
 
 
-def all_rooms(request):
+class RoomDetail(DetailView):
+    """RoomDetail definition"""
+
+    model = models.Room
+    pk_url_kwarg: str = "pk"
+
+
+def room_detail(request, pk):
     try:
-        pageNum = int(request.GET.get("page", 1))
-        if pageNum <= 0:
-            raise RuntimeError()
+        room = models.Room.objects.get(pk=pk)
+        return render(request, "rooms/room_detail.html", context={"room": room})
     except:
-        pageNum = 1
-    try:
-        pageSize = int(request.GET.get("page_size", 10))
-        if pageSize <= 0:
-            raise RuntimeError()
-    except:
-        pageSize = 10
+        raise Http404()  # raise not return.
+        # return redirect(reverse("core:home"))
 
-    offset = (pageNum - 1) * pageSize
-    limit = pageNum * pageSize
 
-    all_rooms = models.Room.objects.all()[offset:limit]
+# def all_rooms_PAGE(request):
+#     page = request.GET.get("page", 1)
+#     room_list = models.Room.objects.all()
+#     paginator = Paginator(room_list, 10, orphans=5)
 
-    # Total page number calculation.
-    totalRoom = models.Room.objects.count()
-    pageTotal = ceil(totalRoom / pageSize)
+#     try:
+#         rooms = paginator.page(int(page))
+#         return render(
+#             request,
+#             "rooms/home.html",
+#             context={"page": rooms},
+#         )
+#     except EmptyPage:
+#         return redirect("/")
+#     except:  # ValueError.
+#         return redirect("/")
 
-    return render(
-        request,
-        "rooms/home.html",
-        context={
-            "rooms": all_rooms,
-            "pageNum": pageNum,
-            "pageTotal": pageTotal,
-            "pageRange": range(1, pageTotal + 1),
-            "pageSize": pageSize,
-        },
-    )
+
+# def all_rooms_GET_PAGE(request):
+#     page = request.GET.get("page")
+#     room_list = models.Room.objects.all()
+#     paginator = Paginator(room_list, 10, orphans=5)
+#     rooms = paginator.get_page(page)
+#     print("Vars get_page : ", vars(rooms))
+#     print("Vars paginator : ", vars(rooms.paginator))
+#     return render(
+#         request,
+#         "rooms/home.html",
+#         context={"page": rooms},
+#     )
