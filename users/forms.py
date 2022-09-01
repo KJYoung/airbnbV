@@ -39,3 +39,45 @@ class LoginForm(forms.Form):
             self.add_error(
                 "email", forms.ValidationError("Username(Email) does not exist.")
             )
+
+
+class SignUpForm(forms.Form):
+    email = forms.EmailField()
+
+    first_name = forms.CharField(max_length=60)
+    last_name = forms.CharField(max_length=60)
+
+    password = forms.CharField(widget=forms.PasswordInput)
+    password_confirm = forms.CharField(
+        widget=forms.PasswordInput, label="Confirm Password"
+    )
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        try:
+            user = models.User.objects.get(email=email)
+            raise forms.ValidationError("Email is already used.")
+        except models.User.DoesNotExist:
+            return email
+
+    def clean_password_confirm(self):
+        password_confirm = self.cleaned_data.get("password_confirm")
+        password = self.cleaned_data.get("password")
+
+        if password != password_confirm:
+            raise forms.ValidationError("Two password are not same.")
+        else:
+            return password
+
+    def save(self):
+        email = self.cleaned_data.get("email")
+        first_name = self.cleaned_data.get("first_name")
+        last_name = self.cleaned_data.get("last_name")
+        password = self.cleaned_data.get("password")
+
+        new_user = models.User.objects.create_user(
+            email, email=email, password=password
+        )
+        new_user.first_name = first_name
+        new_user.last_name = last_name
+        new_user.save()
