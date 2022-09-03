@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
 from django.views.generic import FormView
+from django.core.files.base import ContentFile
 from . import forms, models
 
 
@@ -142,6 +143,7 @@ def github_callback(request):
                             bio=bio,
                             email=email,
                             login_method=models.User.LOGIN_GITHUB,
+                            email_verified=True,
                         )
                         new_user.set_unusable_password()
                         new_user.save()
@@ -157,3 +159,114 @@ def github_callback(request):
     except:
         print("UnknownException")
         return redirect(reverse("users:login"))
+
+
+class KakaoException(Exception):
+    pass
+
+
+def kakao_login(request):
+    rest_api_key = os.environ.get("KAKAO_KEY")
+    redirect_uri = "http://127.0.0.1:8000/users/login/kakao/callback/"
+    return redirect(
+        f"https://kauth.kakao.com/oauth/authorize?client_id={rest_api_key}&redirect_uri={redirect_uri}&response_type=code"
+    )
+
+
+def kakao_callback(request):
+    try:
+        rest_api_key = os.environ.get("KAKAO_KEY")
+        kakao_admin_key = os.environ.get("KAKAO_ADMIN_KEY")
+        redirect_uri = "http://127.0.0.1:8000/users/login/kakao/callback/"
+        code = request.GET.get("code")
+        token_request = requests.get(
+            f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={rest_api_key}&redirect_uri={redirect_uri}&code={code}",
+            headers={"Content-type": "application/x-www-form-urlencoded;charset=utf-8"},
+        )
+        response_json = token_request.json()
+        error = response_json.get("error", None)
+        if error is not None:
+            raise KakaoException("There was an error with token_request.")
+        else:
+            access_token = response_json.get("access_token")
+            profile_request = requests.get(
+                f"https://kapi.kakao.com/v2/user/me",
+                headers={
+                    "Authorization": f"Bearer {access_token}",
+                    "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+                },
+            )
+            profile_json = profile_request.json()
+            kakao_account = profile_json.get("kakao_account")
+            properties = profile_json.get("properties")
+
+            has_email = kakao_account.get("has_email")
+            if has_email:
+                email = kakao_account.get("email", None)
+                if email is None:
+                    raise KakaoException("You should check the email options.")
+            else:
+                # email = "no_email_kakao@kakao.error"
+                raise KakaoException("You should check the email options.")
+
+            nickname = properties.get("nickname")
+            profile_image = properties.get("profile_image", None)
+
+            try:
+                user = models.User.objects.get(email=email)
+                if user.login_method == models.User.LOGIN_KAKAO:
+                    # trying to login.
+                    login(request, user)
+                else:
+                    raise KakaoException(f"The email [{email}] is already used.")
+
+            except models.User.DoesNotExist:
+                new_user = models.User.objects.create(
+                    username=email,
+                    first_name=nickname,
+                    email=email,
+                    login_method=models.User.LOGIN_KAKAO,
+                    email_verified=True,
+                )
+                new_user.set_unusable_password()
+                new_user.save()
+                if profile_image is not None and profile_image != "":
+                    photo_request = requests.get(profile_image)
+                    email_wo_at = email.replace("@", "_")
+                    new_user.avatar.save(
+                        f"{email_wo_at}-avatar.jpg", ContentFile(photo_request.content)
+                    )
+                    new_user.save()
+                login(request, new_user)
+            return redirect(reverse("core:home"))
+    except KakaoException as e:
+        print(f"KakaoException. MSG : {str(e)}")
+        return redirect(reverse("users:login"))
+
+
+# json 버전 {'access_token': 'dw6ihvYs0xfHd72ki8Pfs00KGQP7H_2UWMfBV_cpCj11WwAAAYMDW8uE', 'token_type': 'bearer', 'refresh_token': 'MzwzwfY41RdrWxeLX-w-mPKn77Ca0j1TDY4jLlT-Cj11WwAAAYMDW8uD', 'expires_in': 21599, 'scope': 'account_email profile_image profile_nickname', 'refresh_token_expires_in': 5183999}
+# json 버전
+temp = {
+    "id": 2415334006,
+    "connected_at": "2022-09-03T12:38:11Z",
+    "properties": {
+        "nickname": "김준영",
+        "profile_image": "http://k.kakaocdn.net/dn/eN6TtK/btrGDLWw99Q/hYWJmqH3np4IDZveAuu3ok/img_640x640.jpg",
+        "thumbnail_image": "http://k.kakaocdn.net/dn/eN6TtK/btrGDLWw99Q/hYWJmqH3np4IDZveAuu3ok/img_110x110.jpg",
+    },
+    "kakao_account": {
+        "profile_nickname_needs_agreement": False,
+        "profile_image_needs_agreement": False,
+        "profile": {
+            "nickname": "김준영",
+            "thumbnail_image_url": "http://k.kakaocdn.net/dn/eN6TtK/btrGDLWw99Q/hYWJmqH3np4IDZveAuu3ok/img_110x110.jpg",
+            "profile_image_url": "http://k.kakaocdn.net/dn/eN6TtK/btrGDLWw99Q/hYWJmqH3np4IDZveAuu3ok/img_640x640.jpg",
+            "is_default_image": False,
+        },
+        "has_email": True,
+        "email_needs_agreement": False,
+        "is_email_valid": True,
+        "is_email_verified": True,
+        "email": "jykim157@naver.com",
+    },
+}
