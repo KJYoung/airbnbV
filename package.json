@@ -1,0 +1,23 @@
+{
+  "name": "airbnbv",
+  "version": "1.0.0",
+  "description": "Hi!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KJYoung/airbnbV.git"
+  },
+  "scripts": {
+    "css": "gulp"
+  },
+  "homepage": "https://github.com/KJYoung/airbnbV#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.8",
+    "gulp": "^4.0.2",
+    "gulp-csso": "^4.0.1",
+    "gulp-postcss": "^9.0.1",
+    "gulp-sass": "^5.1.0",
+    "node-sass": "^7.0.1",
+    "sass": "^1.54.8",
+    "tailwindcss": "^3.1.8"
+  }
+}

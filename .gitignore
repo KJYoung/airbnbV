@@ -5,7 +5,7 @@ memo.txt
 *.jpg
 *.jpeg
 uploads/*
-
+node_modules
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
