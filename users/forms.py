@@ -38,9 +38,7 @@ class LoginForm(forms.Form):
             else:
                 self.add_error("password", forms.ValidationError("Wrong password."))
         except models.User.DoesNotExist:
-            self.add_error(
-                "email", forms.ValidationError("Username(Email) does not exist.")
-            )
+            self.add_error("email", forms.ValidationError("Email does not exist."))
 
 
 class SignUpForm(forms.ModelForm):
@@ -63,6 +61,8 @@ class SignUpForm(forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
+        if email == "":
+            raise forms.ValidationError("Email is not valid.")
         try:
             user = models.User.objects.get(email=email)
             raise forms.ValidationError("Email is already used.")
@@ -74,7 +74,7 @@ class SignUpForm(forms.ModelForm):
         password = self.cleaned_data.get("password")
 
         if password != password_confirm:
-            raise forms.ValidationError("Two password are not same.")
+            raise forms.ValidationError("Two passwords are not same.")
         else:
             return password
 

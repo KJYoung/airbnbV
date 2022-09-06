@@ -22,3 +22,11 @@
         @apply btn-input;
     }
 }
+
+.input{
+    &.has-error {
+        input {
+            @apply bg-red-200 border-gray-400 focus:border-gray-600 mb-2 mt-px;
+        }
+    }
+}

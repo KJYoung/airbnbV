@@ -69,6 +69,7 @@ class User(AbstractUser):
             html_message = render_to_string(
                 "emails/verify_email.html", {"secret": secret}
             )
+            print(f"Email is sent to {self.email}")
             send_mail(
                 "Verify Vairbnb Account",
                 strip_tags(html_message),

@@ -17,22 +17,7 @@
 
         {% include "partials/social_login.html" %}
 
-        <form method="POST" action="{% url 'users:login' %}" class="w-full form-input">
-            {% csrf_token %}
-            {% comment %} {{form.as_p}} {% endcomment %}
-            {{form.first_name}}
-            {{form.last_name}}
-            {{form.email}}
-            {{form.password}}
-            {{form.password_confirm}}
-
-            {% comment %} <input type="text" placeholder="First name" class="btn-input"/>
-            <input type="text" placeholder="Last name" class="btn-input"/>
-            <input type="email" placeholder="Email" class="btn-input"/>
-            <input type="password" placeholder="Password" class="btn-input"/>
-            <input type="password" placeholder="Confirm Password" class="btn-input"/> {% endcomment %}
-            <button class="btn bg-red-400 text-white w-full mt-2">Sign up</button>
-        </form>
+        {% include "mixins/auth/auth_form.html" with form=form cta="Sign up"%}
 
         <div class="mt-3">
             <span class="mr-2">Have an account?</span>
