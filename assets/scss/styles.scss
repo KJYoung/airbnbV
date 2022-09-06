@@ -8,3 +8,17 @@
         @apply py-10 px-5;
     }
 }
+
+.btn{
+    @apply font-medium text-center rounded-sm py-2 mb-2;
+}
+.btn-input{
+    @apply font-medium rounded-sm py-2 mb-2;
+    @apply w-full placeholder:text-left text-left border border-gray-600 px-5 focus:outline-none focus:border-teal-500 my-2;
+}
+
+.form-input{
+    input{
+        @apply btn-input;
+    }
+}

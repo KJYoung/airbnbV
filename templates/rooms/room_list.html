@@ -5,27 +5,32 @@
 {% endblock page_name %}
 
 {% block content %}
-    <div class="container rounded-vxl bg-gray-800 h-50vh mt-32 mb-20 mx-auto bg-center" style="background-image:url(https://images.unsplash.com/photo-1662329070305-41ab4229f110?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80)">
+    <div class="container mx-auto pb-10">
+        <div class="container rounded-vxl bg-gray-800 h-50vh mt-32 mb-20 bg-cover bg-center" style="background-image:url(https://images.unsplash.com/photo-1662329070305-41ab4229f110?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80)"></div>
+
+        <div class="flex flex-wrap -mx-40 mb-10">
+            {% for room in rooms %}
+                {% include 'partials/room_card.html' with room=room %}
+            {% endfor %}
+        </div>
+        <div class="container flex items-center mx-aut justify-center">
+            {% if page_obj.has_previous %}
+                <a href="?page={{page_obj.previous_page_number}}" class="text-teal-500">◀️</a>
+            {% endif %}
+                <span class="mx-3 font-medium text-lg">
+                    {{page_obj.number}}/{{page_obj.paginator.num_pages}}
+                </span>
+            {% if page_obj.has_next %}
+                <a href="?page={{page_obj.next_page_number}}" class="text-teal-500">▶️</a>
+            {% endif %}
+        </div>
+        <div class="container flex items-center mx-aut justify-center">
+            {% for pageNum in page_obj.paginator.page_range %}
+                <a class="mx-px" href="?page={{pageNum}}">{{pageNum}}</a>
+            {% endfor %}
+        </div>
+
+        
 
     </div>
-    {% for room in rooms %}
-        <h4>
-            {% comment %} <a href="/rooms/{{room.pk}}">{{room.name}} / {{room.price}}</a> {% endcomment %}
-            <a href="{% url 'rooms:detail' room.pk %}">{{room.name}} / {{room.price}}</a>
-        </h4>
-    {% endfor %}
-
-    <h5>
-        {% if page_obj.has_previous %}
-            <a href="?page={{page_obj.previous_page_number}}">◀️</a>
-        {% endif %}
-        Page {{page_obj.number}}/{{page_obj.paginator.num_pages}}
-        {% if page_obj.has_next %}
-            <a href="?page={{page_obj.next_page_number}}">▶️</a>
-        {% endif %}
-    </h5>
-
-    {% for pageNum in page_obj.paginator.page_range %}
-        <a href="?page={{pageNum}}">{{pageNum}}</a>
-    {% endfor %}
 {% endblock content %}

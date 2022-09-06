@@ -3,8 +3,10 @@ from . import models
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "Email"}))
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={"placeholder": "Password"})
+    )
 
     # def clean_email(self):
     #     email = self.cleaned_data.get("email")
@@ -45,10 +47,18 @@ class SignUpForm(forms.ModelForm):
     class Meta:
         model = models.User
         fields = ("first_name", "last_name", "email")
+        widgets = {
+            "first_name": forms.TextInput(attrs={"placeholder": "First name"}),
+            "last_name": forms.TextInput(attrs={"placeholder": "Last name"}),
+            "email": forms.EmailInput(attrs={"placeholder": "Email"}),
+        }
 
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={"placeholder": "Password"})
+    )
     password_confirm = forms.CharField(
-        widget=forms.PasswordInput, label="Confirm Password"
+        widget=forms.PasswordInput(attrs={"placeholder": "Password Confirm"}),
+        label="Confirm Password",
     )
 
     def clean_email(self):
