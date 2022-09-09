@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block page_name %}
+    {{user_profile.first_name}} | Profile
+{% endblock page_name %}
+
+{% block search-bar %}
+{% endblock search-bar %}
+
+{% block content %}
+    <div class="h-75vh">
+        <div class="container lg:w-5/12 md:w-1/2 xl:w-1/4 mx-auto my-10 flex flex-col items-center border p-6 border-gray-400">
+            
+            {% include "mixins/user_avatar.html" with user_profile=user_profile %}
+
+            <div class="flex justify-center items-center">
+                    <span class="text-2xl mt-2">{{user_profile.first_name}} {{user_profile.last_name}}</span>
+                    {% if user_profile.superhost %}
+                        <i class="fas fa-check-circle text-blue-500 ml-1 text-lg pt-2"></i>
+                    {% endif %}
+            </div>
+            <span class="">{{user_profile.bio}}</span>
+            
+            {% if user_profile == user %}
+                <a href="#" class="btn-link w-1/2 mt-4">Edit Profile</a>
+            {% endif %}
+        </div>
+
+        {% if user_profile.rooms.count > 0 %}
+            <div class="container mx-auto pb-10 flex flex-col items-center">
+                <h3 class="mb-5 text-xl">Rooms hosted by {{user_profile.first_name}}</h3>
+                <div class="flex flex-wrap mb-10 w-full">
+                    {% for room in user_profile.rooms.all %}
+                        {% include 'mixins/room_card.html' with room=room %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}

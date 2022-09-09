@@ -5,12 +5,18 @@
 .nav_link {
     @apply ml-8 border-b-2 border-b-white hover:border-b-gray-600 h-full flex items-center;
     a {
-        @apply py-10 px-5;
+        @apply py-10 px-4;
     }
 }
 
 .btn{
     @apply font-medium text-center rounded-sm py-2 mb-2;
+    &.btn--small{
+        @apply rounded-lg;
+    }
+}
+.btn-link{
+    @apply font-medium text-center rounded-lg py-2 mb-2 bg-blue-300;
 }
 .btn-input{
     @apply font-medium rounded-sm py-2 mb-2;
@@ -28,5 +34,43 @@
         input {
             @apply bg-red-200 border-gray-400 focus:border-gray-600 mb-2 mt-px;
         }
+    }
+}
+
+@keyframes messageFadeIn {
+    0%{
+        opacity: 0;
+        transform: translateY(-60px);
+    }
+    5%{
+        opacity: 1;
+        transform: translateY(30px);
+    }
+    95%{
+        opacity: 1;
+        transform: translateY(30px);
+    }
+    100%{
+        opacity: 0;
+        transform: translateY(-60px);
+    }
+}
+
+.message{
+    animation: messageFadeIn 4s ease-in-out forwards;
+    &.error{
+        @apply bg-red-600;
+    }
+    &.success{
+        @apply bg-green-500;
+    }
+    &.debug{
+
+    }
+    &.info{
+        @apply bg-blue-400;
+    }
+    &.warning{
+        @apply bg-yellow-400;
     }
 }

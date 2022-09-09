@@ -1,0 +1,9 @@
+{% if user_profile.avatar %}
+    <div class="h-16 w-16 rounded-full border border-gray-500 bg-cover"
+            style="background-image: url({{user_profile.avatar.url}})">
+    </div>
+{% else %}
+    <div class="h-16 w-16 rounded-full border border-gray-500 bg-blue-500 text-white flex overflow-hidden justify-center items-center text-center">
+        <span class="text-4xl">{{user_profile.first_name|first}}</span>
+    </div>
+{% endif %}

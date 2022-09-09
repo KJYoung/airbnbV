@@ -8,26 +8,6 @@ class LoginForm(forms.Form):
         widget=forms.PasswordInput(attrs={"placeholder": "Password"})
     )
 
-    # def clean_email(self):
-    #     email = self.cleaned_data.get("email")
-    #     try:
-    #         user = models.User.objects.get(username=email)
-    #         return email
-    #     except models.User.DoesNotExist:
-    #         raise forms.ValidationError("Username(Email) does not exist.")
-
-    # def clean_password(self):
-    #     email = self.cleaned_data.get("email")
-    #     password = self.cleaned_data.get("password")
-    #     try:
-    #         user = models.User.objects.get(username=email)
-    #         if user.check_password(password):
-    #             return password
-    #         else:
-    #             raise forms.ValidationError("Wrong password.")
-    #     except models.User.DoesNotExist:
-    #         pass
-
     def clean(self):
         email = self.cleaned_data.get("email")
         password = self.cleaned_data.get("password")
