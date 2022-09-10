@@ -1,22 +1,28 @@
 import os
-from urllib import request
 import requests
 from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
-from django.views import View
-from django.views.generic import FormView, DetailView
+from django.views.generic import FormView, DetailView, UpdateView
+from django.contrib.auth.views import PasswordChangeView
 from django.core.files.base import ContentFile
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from . import forms, models
+from django.contrib.messages.views import SuccessMessageMixin
+from . import forms, models, mixins
 
 
-class LoginView(FormView):
+class LoginView(mixins.AnnonymousOnlyView, FormView):
     template_name: str = "users/login.html"
     form_class = forms.LoginForm
-    success_url = reverse_lazy("core:home")
+    # success_url = reverse_lazy("core:home")
     # initial = {"email": "jykim157@snu.ac.kr"}
+    def get_success_url(self):
+        next_arg = self.request.GET.get("next")
+        if next_arg is not None:
+            return next_arg
+        else:
+            return reverse("core:home")
 
     def form_valid(self, form):
         email = form.cleaned_data.get("email")
@@ -24,29 +30,8 @@ class LoginView(FormView):
         user = authenticate(self.request, username=email, password=password)
         if user is not None:
             login(self.request, user)
-            messages.success(request, f"Welcome back {user.first_name}!")
+            messages.success(self.request, f"Welcome back {user.first_name}!")
         return super().form_valid(form)
-
-
-# class LoginView(View):
-#     def get(self, request):
-#         form = forms.LoginForm(initial={"email": "jykim157@snu.ac.kr"})
-#         return render(request, "users/login.html", {"form": form})
-
-#     def post(self, request):
-#         form = forms.LoginForm(request.POST)
-
-#         # Validation.
-#         if form.is_valid():
-#             email = form.cleaned_data.get("email")
-#             password = form.cleaned_data.get("password")
-#             user = authenticate(request, username=email, password=password)
-#             if user is not None:
-#                 login(request, user)
-#                 return redirect(reverse("core:home"))
-#         else:
-#             print("is not valid")
-#         return render(request, "users/login.html", {"form": form})
 
 
 def logout_view(request):
@@ -55,7 +40,7 @@ def logout_view(request):
     return redirect(reverse("core:home"))
 
 
-class SignUpView(FormView):
+class SignUpView(mixins.AnnonymousOnlyView, FormView):
     template_name: str = "users/signup.html"
     form_class = forms.SignUpForm
     success_url = reverse_lazy("core:home")
@@ -90,16 +75,71 @@ def complete_verification(request, email_key):
     return redirect(reverse("core:home"))
 
 
+class EditProfileView(mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView):
+    model = models.User
+    template_name = "users/edit_profile.html"
+    fields = (
+        "first_name",
+        "last_name",
+        "avatar",
+        "gender",
+        "bio",
+        "birth",
+        "language",
+        "currency",
+    )
+    success_message = "Profile updated successfully!"
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields["birth"].widget.attrs = {"placeholder": "Birthdate"}
+        form.fields["first_name"].widget.attrs = {"placeholder": "First name"}
+        form.fields["last_name"].widget.attrs = {"placeholder": "Last name"}
+        return form
+
+    def form_valid(self, form):
+        # I will not allow email modification.
+        # email = form.cleaned_data.get("email")
+        # self.object.username = email
+        # self.object.save()
+        return super().form_valid(form)
+
+
+class UpdatePassword(
+    mixins.EmailUserOnlyView,
+    mixins.LoggedInOnlyView,
+    SuccessMessageMixin,
+    PasswordChangeView,
+):
+    template_name = "users/change_password.html"
+    success_message = "Password changed successfully!"
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields["old_password"].widget.attrs = {"placeholder": "Current Passoword"}
+        form.fields["new_password1"].widget.attrs = {"placeholder": "New Password"}
+        form.fields["new_password2"].widget.attrs = {
+            "placeholder": "New Password Again"
+        }
+        return form
+
+    def get_success_url(self) -> str:
+        return self.request.user.get_absolute_url()
+
+
+class GithubException(Exception):
+    pass
+
+
 def github_login(request):
     client_id = os.environ.get("GH_ID")
     redirect_uri = "http://127.0.0.1:8000/users/login/github/callback/"
     return redirect(
         f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope=read:user"
     )
-
-
-class GithubException(Exception):
-    pass
 
 
 def github_callback(request):
@@ -258,8 +298,3 @@ class UserProfileView(DetailView):
 
     model = models.User
     context_object_name = "user_profile"
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context[""] = ""
-    #     return context

@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+input,
+textarea,
+select {
+  @apply rounded-sm font-light w-full text-left border border-gray-600 px-3 my-2;
+  &:focus {
+    @apply outline-none border-teal-500;
+  }
+}
+
 .nav_link {
     @apply ml-8 border-b-2 border-b-white hover:border-b-gray-600 h-full flex items-center;
     a {
@@ -74,3 +83,19 @@
         @apply bg-yellow-400;
     }
 }
+
+textarea{
+    @apply border border-gray-800;
+    resize: none;
+    height: 120px;
+}
+
+.form-input{
+    textarea{
+        @apply w-full p-1;
+    }
+    select{
+        height: 35px;
+    }
+}
+
