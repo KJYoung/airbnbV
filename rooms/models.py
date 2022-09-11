@@ -115,8 +115,13 @@ class Room(core_models.AbstractTimeStampedModel):
         return reverse("rooms:detail", kwargs={"pk": self.pk})
 
     def get_first_photo_url(self):
-        (photo,) = self.photos.all()[:1]
-        return photo.file.url
+        try:
+            print(self.name, self.photos.count())
+            (photo,) = self.photos.all()[:1]
+            print(self.name, photo.file.url)
+            return photo.file.url
+        except:
+            return None
 
     def get_four_photos(self):
         photos = self.photos.all()[1:5]

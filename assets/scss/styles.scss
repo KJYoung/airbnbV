@@ -27,6 +27,12 @@ select {
 .btn-link{
     @apply font-medium text-center rounded-lg py-2 mb-2 bg-blue-300;
 }
+.btn-link-teal{
+    @apply font-medium text-center rounded-lg py-2 mb-2 bg-teal-400;
+}
+.btn-link-red{
+    @apply font-medium text-center rounded-lg py-2 mb-2 bg-red-300;
+}
 .btn-input{
     @apply font-medium rounded-sm py-2 mb-2;
     @apply w-full placeholder:text-left text-left border border-gray-600 px-5 focus:outline-none focus:border-teal-500 my-2;

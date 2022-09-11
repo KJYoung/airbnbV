@@ -141,6 +141,7 @@ MEDIA_ROOT = os.path.join(
 )  # The directory where the uploaded media will be saved.
 
 MEDIA_URL = "/media/"
+LOGIN_URL = "/users/login/"
 
 # Email Config.
 EMAIL_HOST = "smtp.mailgun.org"
