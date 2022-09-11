@@ -99,3 +99,9 @@ textarea{
     }
 }
 
+.border-section{
+    @apply border-b border-gray-400 pb-4 mt-4;
+}
+.border-section-sm{
+    @apply border-b border-gray-200 pb-2 mt-2;
+}
