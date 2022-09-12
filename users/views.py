@@ -9,6 +9,7 @@ from django.core.files.base import ContentFile
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
 from . import forms, models, mixins
 
 
@@ -298,3 +299,12 @@ class UserProfileView(DetailView):
 
     model = models.User
     context_object_name = "user_profile"
+
+
+@login_required
+def switch_hosting_mode(request):
+    try:
+        del request.session["is_hosting"]
+    except KeyError:
+        request.session["is_hosting"] = True
+    return redirect(reverse("core:home"))

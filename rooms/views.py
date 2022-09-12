@@ -1,12 +1,13 @@
 from django.utils import timezone
 from django.http import Http404
-from django.urls import reverse
-from django.views.generic import ListView, DetailView, View, UpdateView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, DetailView, View, UpdateView, FormView
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django_countries import countries
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from users import mixins as user_mixins
 from . import models, forms
 
@@ -168,3 +169,46 @@ def delete_photos(request, room_pk, photo_pk):
         return redirect(reverse("rooms:photos", kwargs={"pk": room_pk}))
     except models.Room.DoesNotExist:
         return redirect(reverse("core:home"))
+
+
+class EditPhotoView(user_mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView):
+    model = models.Photo
+    template_name = "rooms/photo_edit.html"
+    fields = ("caption",)
+    pk_url_kwarg: str = "photo_pk"
+    success_message: str = "Photo caption was updated!"
+
+    def get_object(self, queryset=None):
+        photo = super().get_object(queryset)
+        if photo.room.host.pk != self.request.user.pk:
+            raise Http404("You cannot edit this room.")
+        else:
+            return photo
+
+    def get_success_url(self) -> str:
+        room_pk = self.kwargs.get("room_pk")
+        return reverse("rooms:photos", kwargs={"pk": room_pk})
+
+
+class AddPhotoView(user_mixins.LoggedInOnlyView, FormView):
+    model = models.Photo
+    form_class = forms.CreatePhotoForm
+    template_name: str = "rooms/photo_create.html"
+
+    def form_valid(self, form):
+        pk = self.kwargs.get("pk")
+        form.save(pk)
+        messages.success(self.request, "Photo uploaded!")
+        return redirect(reverse("rooms:photos", kwargs={"pk": pk}))
+
+
+class CreateRoomView(user_mixins.LoggedInOnlyView, FormView):
+    model = models.Room
+    form_class = forms.CreateRoomForm
+    template_name = "rooms/room_create.html"
+
+    def form_valid(self, form):
+        room = form.save(self.request.user)
+        form.save_m2m()
+        messages.success(self.request, "Room created!")
+        return redirect(room.get_absolute_url())
