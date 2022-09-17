@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block page_name %}
+    Reservation | {{reservation.check_in}}
+{% endblock page_name %}
+
+{% block search-bar %}
+{% endblock search-bar %}
+
+{% block content %}
+    <div class="container mx-auto my-10 flex flex-col">
+        <div class="bg-cover bg-center h-56 rounded-t-lg" style="background-image:url({{reservation.room.get_first_photo_url}})"></div>
+        <div class="flex flex-col items-start border-l border-r border-t border-b">
+            <div class="font-medium border-b py-4 px-4 w-full">
+                {{reservation.check_in}} - {{reservation.check_out}}
+                <span class="ml-4 {% if reservation.status == 'pending' %} text-yellow-600 {% elif reservation.status == 'canceled' %} text-red-500 {% else %} text-green-500 {% endif %}">{{reservation.get_status_display}}<span>
+            </div>
+            <span class="text-3xl mt-3 py-4 px-4">
+                {{reservation.room.name}}
+            </span>
+
+            <div class="flex mt-6 px-4 pb-6 w-full border-b">
+                <div>
+                    <a href="{{reservation.room.host.get_absolute_url}}" class="flex flex-col items-center">
+                        {% include "mixins/user_avatar.html" with user_profile=reservation.room.host %}
+                        <span class="mt-px text-gray-500">{{reservation.room.host.first_name}}</span>
+                    </a>
+                </div>
+                <div class="ml-5 flex flex-col">
+                    <span class="text-center font-medium mb-1">Contact your Airbnb host</span>
+                    <a href="#" class="font-medium text-teal-500">Send a Message</a>
+                </div>
+            </div>
+
+            <div class="py-10 px-5">
+                {% if reservation.status == 'pending' %}
+                    <a href="{% url 'reservations:edit' reservation.pk 'confirm' %}" class="btn-link block px-4 mb-5">Confirm Reservation</a>  
+                {% endif %}
+                {% if reservation.room.host == user and reservation.status == 'pending' %}
+                    <a href="{% url 'reservations:edit' reservation.pk 'cancel' %}" class="btn-link block px-5">Cancel Reservation</a>
+                {% endif %}
+                {% if reservation.status == 'confirmed' and reservation.is_finished %}
+                    <span class="font-medium text-lg text-center w-full block mb-2">Write Review</span>
+                    <form action="{% url 'reviews:create' reservation.room.pk %}" method="POST" class="w-1/2 mx-auto">
+                        {% csrf_token %}
+                        {{form}}
+                        <button class="btn-link block w-full m-px">Submit Review</button>
+                    </form>
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

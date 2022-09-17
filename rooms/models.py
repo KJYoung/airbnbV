@@ -1,9 +1,12 @@
 from django.db import models
 from django.urls import reverse
 from django_countries.fields import CountryField
+from django.utils import timezone
+from dateutil import relativedelta
 
 from core import models as core_models
 from users import models as users_models
+from cal import Calendar
 
 
 class AbstractItem(core_models.AbstractTimeStampedModel):
@@ -116,9 +119,9 @@ class Room(core_models.AbstractTimeStampedModel):
 
     def get_first_photo_url(self):
         try:
-            print(self.name, self.photos.count())
+            # print(self.name, self.photos.count())
             (photo,) = self.photos.all()[:1]
-            print(self.name, photo.file.url)
+            # print(self.name, photo.file.url)
             return photo.file.url
         except:
             return None
@@ -132,3 +135,12 @@ class Room(core_models.AbstractTimeStampedModel):
     #         return f"{self.beds} bed"
     #     else:
     #         return f"{self.beds} beds"
+
+    def get_calendar(self):
+        """This month and Next month."""
+        today = timezone.localtime(timezone.now()).date()
+        nextmonth = today + relativedelta.relativedelta(months=1)
+
+        calendar_cur = Calendar(today.year, today.month)
+        calendar_nex = Calendar(nextmonth.year, nextmonth.month)
+        return [calendar_cur, calendar_nex]
