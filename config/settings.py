@@ -182,8 +182,8 @@ else:
     STATICFILES_STORAGE = "config.custom_storage.StaticStorage"
     AWS_ACCESS_KEY_ID = os.environ.get("AWS_ID")
     AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET")
-    AWS_STORAGE_BUCKET_NAME = "airbnbVkjy"
-    AWS_AUTO_CREATE_BUCKET = True
+    AWS_STORAGE_BUCKET_NAME = "airbnbvkjy"
+    # AWS_AUTO_CREATE_BUCKET = True
 
     AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.ap-northeast-2.amazonaws.com"
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
