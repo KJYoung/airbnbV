@@ -12,6 +12,7 @@ django-dotenv = "*"
 requests = "*"
 setuptools = "*"
 pipenv-to-requirements = "*"
+psycopg2 = "==2.9.1"
 
 [dev-packages]
 flake8 = "*"
