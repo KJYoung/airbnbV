@@ -44,7 +44,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ["django_countries", "django_seed"]
+THIRD_PARTY_APPS = ["django_countries", "django_seed", "storages"]
 
 CUSTOM_APPS = [
     "users.apps.UsersConfig",
@@ -178,6 +178,17 @@ LANGUAGE_COOKIE_NAME = "django_language"
 if DEBUG:
     pass
 else:
+    DEFAULT_FILE_STORAGE = "config.custom_storage.UploadStorage"
+    STATICFILES_STORAGE = "config.custom_storage.StaticStorage"
+    AWS_ACCESS_KEY_ID = os.environ.get("AWS_ID")
+    AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET")
+    AWS_STORAGE_BUCKET_NAME = "airbnbVkjy"
+    AWS_AUTO_CREATE_BUCKET = True
+
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+    # MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+
     sentry_sdk.init(
         dsn=os.environ.get("SENTRY_URL"),
         integrations=[
