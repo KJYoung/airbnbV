@@ -185,7 +185,7 @@ else:
     AWS_STORAGE_BUCKET_NAME = "airbnbVkjy"
     AWS_AUTO_CREATE_BUCKET = True
 
-    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.ap-northeast-2.amazonaws.com"
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
     # MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
 
