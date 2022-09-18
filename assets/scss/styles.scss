@@ -27,6 +27,9 @@ select {
 .btn-link{
     @apply font-medium text-center rounded-lg py-2 mb-2 bg-blue-300;
 }
+.btn-link-mb0{
+    @apply font-medium text-center rounded-lg py-2 bg-blue-300;
+}
 .btn-link-teal{
     @apply font-medium text-center rounded-lg py-2 mb-2 bg-teal-400;
 }
@@ -117,4 +120,10 @@ textarea{
     grid-template-columns: repeat(7, 1fr);
     grid-gap: 2px;
     justify-items: center;
+}
+
+.message-form{
+    input{
+        @apply h-full;
+    }
 }
