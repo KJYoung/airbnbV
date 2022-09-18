@@ -1,3 +1,14 @@
+{% load i18n %}
 <footer class="container mx-auto text-center py-5 border-t font-medium text-gray-400">
-    &copy; 2022 Vbnb. For studying Django for SWPP.
+    <div class="flex flex-col">
+        <span>&copy; 2022 Vbnb.</span>
+        <span>{% trans "For studying Django for SWPP." %}</span>
+    </div>
+    <div class="flex mt-4 justify-center">
+        {% get_current_language as LANGUAGE_CODE %}
+        <select class="w-1/5 text-gray-700 h-8" id="js-lang">
+            <option value="en" {% if LANGUAGE_CODE == 'en' %} selected {% endif %}>English</option>
+            <option value="ko" {% if LANGUAGE_CODE == 'ko' %} selected {% endif %}>한국어</option>
+        </select>
+    </div>
 </footer>

@@ -60,6 +60,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -149,6 +150,11 @@ EMAIL_PORT = 25
 EMAIL_HOST_USER = os.environ.get("MAILGUN_USERNAME")
 EMAIL_HOST_PASSWORD = os.environ.get("MAILGUN_PASSWORD")
 EMAIL_FROM = os.environ.get("EMAIL_FROM")
+
+# Translation.
+LOCALE_PATHS = (os.path.join(BASE_DIR, "locale"),)
+LANGUAGE_CODE = "en"
+LANGUAGE_COOKIE_NAME = "django_language"
 
 # DEBUG = False
 # ALLOWED_HOSTS = ["*"]

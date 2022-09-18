@@ -1,7 +1,8 @@
+{% load i18n %}
 <ul class="flex items-center text-sm font-medium h-full">
     {% if user.is_authenticated %}
         {% if 'is_hosting' in request.session %}
-            <li class="nav_link"><a href="{% url 'rooms:create' %}">New Room</a></li>
+            <li class="nav_link"><a href="{% url 'rooms:create' %}">{% trans 'New Room' %}</a></li>
         {% endif %}
         <li class="nav_link">
             <a href="{% url 'users:switch-hosting' %}">
@@ -12,10 +13,11 @@
                 {% endif %}
             </a>
         </li>
-        <li class="nav_link"><a href="{{user.get_absolute_url}}">Profile</a></li>
-        <li class="nav_link"><a href="{% url 'users:logout' %}">Log out</a></li>
+        <li class="nav_link"><a href="{% url 'lists:see-favs' %}">{% trans 'Favs' %}</a></li>
+        <li class="nav_link"><a href="{{user.get_absolute_url}}">{% trans 'Profile' %}</a></li>
+        <li class="nav_link"><a href="{% url 'users:logout' %}">{% trans 'Log out' %}</a></li>
     {% else %}
-        <li class="nav_link"><a href="{% url 'users:login' %}">Log in</a></li>
-        <li class="nav_link"><a href="{% url 'users:signup' %}">Sign up</a></li>
+        <li class="nav_link"><a href="{% url 'users:login' %}">{% trans 'Log in' %}</a></li>
+        <li class="nav_link"><a href="{% url 'users:signup' %}">{% trans 'Sign up' %}</a></li>
     {% endif %}
 </ul>

@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.shortcuts import redirect
+from django.utils.translation import gettext_lazy as _
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 
@@ -11,7 +12,7 @@ class AnnonymousOnlyView(UserPassesTestMixin):
         return not self.request.user.is_authenticated
 
     def handle_no_permission(self):
-        messages.error(self.request, "Can't go there!")
+        messages.error(self.request, _("Can't go there!"))
         return redirect(reverse("core:home"))
 
 
@@ -29,5 +30,5 @@ class EmailUserOnlyView(UserPassesTestMixin):
         return self.request.user.login_method == "email"
 
     def handle_no_permission(self):
-        messages.error(self.request, "Can't go there!")
+        messages.error(self.request, _("Can't go there!"))
         return redirect(reverse("core:home"))

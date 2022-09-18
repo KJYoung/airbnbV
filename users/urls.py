@@ -20,4 +20,5 @@ urlpatterns = [
     path("edit-profile/", views.EditProfileView.as_view(), name="edit_profile"),
     path("password-change/", views.UpdatePassword.as_view(), name="password_change"),
     path("switch-hosting/", views.switch_hosting_mode, name="switch-hosting"),
+    path("switch-lang/", views.switch_lang, name="switch-lang"),
 ]

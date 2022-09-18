@@ -1,0 +1,104 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-18 15:51+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: lists/views.py:22 lists/views.py:27 users/mixins.py:15 users/mixins.py:33
+msgid "Can't go there!"
+msgstr "잘못된 접근입니다."
+
+#: templates/base.html:24
+msgid "Search by City"
+msgstr "도시 이름으로 검색하기"
+
+#: templates/partials/footer.html:5
+msgid "For studying Django for SWPP."
+msgstr "소개원실을 위해 Django 공부를 하기 위한 목적의 토이 프로젝트."
+
+#: templates/partials/nav.html:5
+msgid "New Room"
+msgstr "장소 추가"
+
+#: templates/partials/nav.html:16
+msgid "Favs"
+msgstr "즐겨찾기"
+
+#: templates/partials/nav.html:17
+msgid "Profile"
+msgstr "프로필"
+
+#: templates/partials/nav.html:18
+msgid "Log out"
+msgstr "로그아웃"
+
+#: templates/partials/nav.html:20
+msgid "Log in"
+msgstr "로그인"
+
+#: templates/partials/nav.html:21
+msgid "Sign up"
+msgstr "회원가입"
+
+#: templates/rooms/room_detail.html:107
+msgid "Remove from Favorite"
+msgstr "즐겨찾기에서 삭제"
+
+#: templates/rooms/room_detail.html:109
+msgid "Save to Favorite"
+msgstr "즐겨찾기에 저장"
+
+#: templates/rooms/room_list.html:21
+#, python-format
+msgid "Page %(current_page)s/%(total_pages)s"
+msgstr "페이지 %(current_page)s/%(total_pages)s"
+
+#: users/models.py:20
+msgid "Male"
+msgstr "남성"
+
+#: users/models.py:21
+msgid "Female"
+msgstr "여성"
+
+#: users/models.py:22
+msgid "Other"
+msgstr "기타"
+
+#: users/models.py:29
+msgid "English"
+msgstr "영어"
+
+#: users/models.py:30
+msgid "Korean"
+msgstr "한국어"
+
+#: users/models.py:50
+msgid "gender"
+msgstr "성별"
+
+#: users/models.py:52
+msgid "bio"
+msgstr "자기 소개"
+
+#: users/models.py:55
+msgid "language"
+msgstr "언어"
+
+#: users/models.py:88
+msgid "Verify Vairbnb Account"
+msgstr "Vairbnb 계정에 대한 이메일을 검증하세요"

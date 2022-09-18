@@ -1,5 +1,7 @@
 import os
 import requests
+from django.http import HttpResponse
+from django.utils import translation
 from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
@@ -308,3 +310,12 @@ def switch_hosting_mode(request):
     except KeyError:
         request.session["is_hosting"] = True
     return redirect(reverse("core:home"))
+
+
+def switch_lang(request):
+    lang = request.GET.get("lang", None)
+    if lang is not None:
+        request.session[translation.LANGUAGE_SESSION_KEY] = lang
+    else:
+        pass
+    return HttpResponse(status=200)

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block page_name %}
     Home
 {% endblock page_name %}
@@ -18,7 +18,7 @@
                 <a href="?page={{page_obj.previous_page_number}}" class="text-teal-500">◀️</a>
             {% endif %}
                 <span class="mx-3 font-medium text-lg">
-                    {{page_obj.number}}/{{page_obj.paginator.num_pages}}
+                    {% blocktrans with current_page=page_obj.number total_pages=page_obj.paginator.num_pages%}Page {{current_page}}/{{total_pages}}{% endblocktrans %}
                 </span>
             {% if page_obj.has_next %}
                 <a href="?page={{page_obj.next_page_number}}" class="text-teal-500">▶️</a>
