@@ -10,6 +10,7 @@ django-countries = "*"
 django-seed = "==0.2.2"
 django-dotenv = "*"
 requests = "*"
+setuptools = "*"
 
 [dev-packages]
 flake8 = "*"
